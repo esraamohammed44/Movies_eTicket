@@ -1,0 +1,457 @@
+﻿@* @model IEnumerable<Movie>
+@{
+    ViewData["Title"] = "List of Movies";
+}
+@using System.Globalization
+
+@{
+    CultureInfo culture = new CultureInfo("en-US"); // Set culture to English for month names and currency
+}
+
+<style>
+    .movie-image {
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        width: 450px; /* Set the desired width for the images */
+        height: 550px; /* Set the desired height for the images */
+        object-fit: cover; /* Maintain aspect ratio and cover the entire area */
+        margin-top: 20px; /* Add top margin */
+    }
+
+        .movie-image:hover {
+            transform: scale(1.05);
+        }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+        .card-body p {
+            margin-bottom: 0; /* Remove default margin for paragraphs */
+            color: #333; /* Darken the text color */
+        }
+
+    .card-title {
+        font-weight: bold; /* Make the title bold */
+        color: #444; /* Slightly darken the title color */
+        margin-bottom: 10px; /* Add bottom margin to the title */
+    }
+
+    .card-text {
+        color: #666; /* Dim the text color */
+        line-height: 1.4; /* Increase line height for better readability */
+    }
+
+    .badge {
+        font-size: 0.9em; /* Adjust font size for badges */
+    }
+
+    .card-footer {
+        background-color: #f8f9fa;
+        border-top: none; /* Remove border from top of footer */
+    }
+
+    .btn {
+        font-size: 0.9em; /* Adjust font size for buttons */
+    }
+</style>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100 shadow" style="border-radius: 20px;">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div class="d-flex justify-content-center">
+                        <img src="/images/@item.ImageURL" class="card-img-top movie-image" alt="@item.Name">
+                    </div>
+                    <div>
+                        <h5 class="card-title" style="font-style: italic;">@item.Name</h5>
+                        <p class="card-text" style="font-style: italic;">@item.Description</p>
+                        <p class="card-text" style="font-style: italic;"><b>Cinema: </b>@item.Cinema.Name</p>
+                        <p class="card-text" style="font-style: italic;"><b>Category: </b>@item.MovieCategory</p>
+                        <p class="card-text" style="font-style: italic;"><b>Start Date: </b>@item.StartDate.ToString("dd MMMM yyyy", culture)</p>
+                        <p class="card-text" style="font-style: italic;"><b>End Date: </b>@item.EndDate.ToString("dd MMMM yyyy", culture)</p>
+                        <p class="card-text">
+                            <b>Status: </b>
+                            @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
+                            {
+                                <span class="badge bg-success text-white">AVAILABLE</span>
+                            }
+                            else if (DateTime.Now > item.EndDate)
+                            {
+                                <span class="badge bg-danger text-white">EXPIRED</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-primary text-white">UPCOMING</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="#" class="btn btn-outline-primary"><i class="bi bi-eye-fill"></i> Show Details</a>
+                        <a href="#" class="btn btn-success text-white">
+                            <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("C", culture))
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+ *@
+@* 
+@model IEnumerable<Movie>
+
+@{
+    ViewData["Title"] = "List of Movies";
+}
+@using System.Globalization
+
+@{
+    CultureInfo culture = new CultureInfo("en-US"); // Set culture to English for month names and currency
+}
+
+<style>
+    .card-img-top {
+        height: 100%; 
+        object-fit: cover; 
+    }
+
+    
+    .page-content {
+        margin-top: 70px; 
+    }
+
+</style>
+
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3" style="margin-top: 15px;">
+    @foreach (var item in Model)
+    {
+        <div class="col mb-3">
+            <div class="card h-100">
+                <div class="card-header text-white rgba(0, 0, 0, 0.1);">
+                    <h5 class="card-title">
+                        <span style="color: black;">@item.Name</span>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <a class="text-dark float-right" asp-action="Edit" asp-route-id="@item.Id">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                        }
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="/images/@item.ImageURL" class="card-img-top" alt="@item.Name">
+                        </div>
+                        <div class="col-md-6">
+                            <p class="card-text">@item.Description</p>
+                            <p class="card-text"><b>Cinema: </b>@item.Cinema.Name</p>
+                            <p class="card-text"><b>Category: </b>@item.MovieCategory</p>
+                            <p class="card-text"><b>Start Date: </b>@item.StartDate.ToString("dd MMM yy", culture)</p>
+                            <p class="card-text"><b>End Date: </b>@item.EndDate.ToString("dd MMM yy", culture)</p>
+                            <p class="card-text">
+                                <b>Status: </b>
+                                @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
+                                {
+                                    <span class="badge bg-success text-white">AVAILABLE</span>
+                                }
+                                else if (DateTime.Now > item.EndDate)
+                                {
+                                    <span class="badge bg-danger text-white">EXPIRED</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-primary text-white">UPCOMING</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">
+                            <i class="bi bi-eye-fill"></i> Show Details
+                        </a>
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            <a class="btn btn-success text-white @((DateTime.Now > item.EndDate) ? "disabled" : "")"
+                               asp-controller="Orders"
+                               asp-action="AddItemToShoppingCart"
+                               asp-route-id="@item.Id">
+                                <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c", culture))
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@await Html.PartialAsync("_CreateItem", "Movies")  *@
+
+
+
+
+@model IEnumerable<Movie>
+@using System.Globalization
+
+@{
+    CultureInfo culture = new CultureInfo("en-US"); // Set culture to English for month names and currency
+}
+
+@{
+    ViewData["Title"] = "List of Movies";
+}
+
+<style>
+
+    body {
+        background-image: url('/images/AllAdmin2.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        font-family: Arial, sans-serif;
+    }
+.btn {
+    display: inherit;
+    font-weight: 400;
+    line-height: 0.5;
+}
+
+.btn-group-vertical .btn {
+    margin-bottom: 5px;
+    width: 120px;
+    height: 40px;
+}
+
+.custom-table-container {
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); 
+    overflow: hidden; 
+}
+
+.custom-table {
+    background-color: #f8f9fa;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+}
+
+    .custom-table th,
+    .custom-table td {
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    .custom-table th {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    .custom-table td {
+        background-color: #fff;
+        color: #333;
+    }
+
+        .custom-table td.start-date,
+        .custom-table td.end-date {
+            width: 120px;
+        }
+
+    .custom-table .status-badge {
+        padding: 8px 12px;
+
+        text-transform: uppercase;
+    }
+
+.badge-available {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge-expired {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.badge-upcoming {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+}
+</style>
+
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+    {
+        <div class="container custom-table-container">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped custom-table">
+                    <thead class="bg-secondary">
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Cinema</th>
+                            <th>Category</th>
+                            <th class="start-date">Start Date</th>
+                            <th class="end-date">End Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                                <tr>
+                                    <td><strong>@item.Name</strong></td>
+                                    <td>@item.Description</td>
+                                    <td>@item.Cinema.Name</td>
+                                    <td>@item.MovieCategory</td>
+                                    <td class="start-date">@item.StartDate.ToString("dd MMM yy", culture)</td>
+                                    <td class="end-date">@item.EndDate.ToString("dd MMM yy", culture)</td>
+                                    <td>
+                                    @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
+                                    {
+                                                <span class="status-badge badge-available">AVAILABLE</span>
+                                    }
+                                    else if (DateTime.Now > item.EndDate)
+                                    {
+                                                <span class="status-badge badge-expired">EXPIRED</span>
+                                    }
+                                    else
+                                    {
+                                                <span class="status-badge badge-upcoming">UPCOMING</span>
+                                    }
+                                    </td>
+                            <td class="action-buttons">
+                                <div class="btn-group-vertical">
+                                    <a class="btn btn-outline-primary btn-sm me-2 d-flex align-items-center justify-content-center" asp-action="Edit" asp-route-id="@item.Id">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </a>
+                                    <a class="btn btn-outline-info btn-sm me-2 d-flex align-items-center justify-content-center" asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="bi bi-eye-fill me-1"></i> Show Details
+                                    </a>
+                                    <a class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center" asp-action="Delete" asp-route-id="@item.Id">
+                                        <i class="bi bi-trash me-1"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                                </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+
+
+@if (!User.IsInRole("Admin"))
+{
+    <style>
+        .card-img-top {
+            height: 400px; 
+            object-fit: cover;
+        }
+
+        .card {
+            height: 400px; 
+            transition: transform 0.3s ease;
+        }
+
+            .card:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+                background-color: #ccc;
+            }
+
+        .page-content {
+            margin-top: 70px;
+        }
+    </style>
+
+    <body style="background-image: url('/images/list2.jpg'); background-size: cover; background-attachment: fixed; font-family: Arial, sans-serif;">
+        <div class="container page-content">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3" style="margin-top: 15px;">
+                @foreach (var item in Model)
+                {
+                    <div class="col mb-3">
+                        <div class="card h-100">
+                            <div class="card-header text-white rgba(0, 0, 0, 0.1);">
+                                <h5 class="card-title">
+                                    <span style="color: black;">@item.Name</span>
+                                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                    {
+                                        <a class="text-dark float-right" asp-action="Edit" asp-route-id="@item.Id">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                    }
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img src="/images/@item.ImageURL" class="card-img-top" alt="@item.Name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="card-text">@item.Description</p>
+                                        <p class="card-text"><b>Cinema: </b>@item.Cinema.Name</p>
+                                        <p class="card-text"><b>Category: </b>@item.MovieCategory</p>
+                                        <p class="card-text"><b>Start Date: </b>@item.StartDate.ToString("dd MMM yy", culture)</p>
+                                        <p class="card-text"><b>End Date: </b>@item.EndDate.ToString("dd MMM yy", culture)</p>
+                                        <p class="card-text">
+                                            <b>Status: </b>
+                                            @if (DateTime.Now >= item.StartDate && DateTime.Now <= item.EndDate)
+                                            {
+                                                <span class="badge bg-success text-white">AVAILABLE</span>
+                                            }
+                                            else if (DateTime.Now > item.EndDate)
+                                            {
+                                                <span class="badge bg-danger text-white">EXPIRED</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-primary text-white">UPCOMING</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">
+                                        <i class="bi bi-eye-fill"></i> Show Details
+                                    </a>
+                                    @if (!User.IsInRole("Admin"))
+                                    {
+                                        <a class="btn btn-success text-white @((DateTime.Now > item.EndDate) ? "disabled" : "")"
+                                           asp-controller="Orders"
+                                           asp-action="AddItemToShoppingCart"
+                                           asp-route-id="@item.Id">
+                                            <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c", culture))
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </body>
+}
+@await Html.PartialAsync("_CreateItem", "Movies") 

@@ -1,0 +1,225 @@
+﻿@model IEnumerable<Cinema>
+
+@{
+    ViewData["Title"] = "List of Cinemas";
+}
+
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <style>
+
+
+
+        body {
+            background-image: url('/images/AllAdmin2.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
+        .hero-table-container {
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .hero-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .hero-table th,
+            .hero-table td {
+                padding: 12px;
+                text-align: left;
+            }
+
+            .hero-table th {
+                background-color: #6c757d;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            .hero-table td {
+                background-color: #fff;
+                color: #333;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .hero-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+        .custom-table {
+            background-color: #f8f9fa;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+            .custom-table th,
+            .custom-table td {
+                padding: 12px 15px;
+                text-align: left;
+            }
+
+            .custom-table th {
+                background-color: #6c757d;
+                color: #fff;
+            }
+
+            .custom-table td {
+                background-color: #fff;
+                color: #333;
+            }
+
+        .btn-group-vertical .btn {
+            display: block;
+            width: 10em;
+            margin-bottom: 8px;
+            padding: 6px 10px;
+            font-size: 14px;
+        }
+    </style>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="hero-table-container custom-table-container">
+                <table class="table table-bordered table-striped hero-table">
+                    <thead>
+                        <tr>
+                            <th>Logo</th>
+                            <th> Name</th>
+                            <th>Description</th>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <th>Actions</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <img class="rounded-circle" src="@Url.Content("~/images/" + item.Logo)" alt="@item.Name" style="max-width: 150px" />
+                                </td>
+                                <td><strong>@Html.DisplayFor(modelItem => item.Name)</strong></td>
+                                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                {
+                                    <td>
+                                        <div class="btn-group-vertical">
+                                            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i> Edit</a>
+                                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye"></i> Details</a>
+                                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Delete</a>
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+
+
+
+
+
+
+
+@if (!User.IsInRole("Admin"))
+{
+    <style>
+        body {
+        background-image: url('/images/list2.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        font-family: Arial, sans-serif;
+        }
+
+        .card {
+        margin-bottom: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        height: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        transition: all 0.3s ease;
+        }
+
+        .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        background-color: #ccc; /* Change the background color to gray */
+        }
+
+        .card-body {
+        padding: 20px;
+        }
+
+        .btn {
+        margin-right: 5px;
+        }
+
+        .card-img-top img {
+        border-radius: 50%;
+        height: 150px;
+        width: 200px;
+        object-fit: cover;
+        }
+
+        .text-side {
+        padding-top: 20px;
+        }
+
+        .card-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        }
+
+        .card-text {
+        font-size: 1rem;
+        color: #666;
+        }
+    </style>
+
+    <div class="container mt-lg-5">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-img-top">
+                            <img class="rounded-circle" src="@Url.Content("~/images/" + item.Logo)" alt="@item.Name" />
+                        </div>
+                        <div class="card-body text-side">
+                            <h5 class="card-title"> <strong>@item.Name</strong></h5>
+                            <p class="card-text">@item.Description</p>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-outline-primary"><i class="bi bi-pencil-square"></i> Edit</a>
+                                <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-outline-info"><i class="bi bi-eye"></i> Details</a>
+                                <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger text-white"><i class="bi bi-trash"></i> Delete</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+}
+
+@await Html.PartialAsync("_CreateItem", "Cinemas")

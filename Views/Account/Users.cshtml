@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ApplicationUser>
+
+@{
+    ViewData["Title"] = "List of all users";
+}
+
+<style>
+  
+    .user-table {
+        border-collapse: collapse;
+        width: 100%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adding shadow effect */
+    }
+
+        .user-table th,
+        .user-table td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        .user-table th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .user-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .user-table tbody tr:hover {
+            background-color: #ddd;
+        }
+
+    body {
+        background-image: url('/images/Users.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+    }
+</style>
+
+<div class="container-fluid background-image">
+    <div class="row justify-content-center align-items-center   ">
+        <div class="col-md-6 " style="    margin-left: 18em;margin-top: 10em;">
+            <h1 class="text-center mb-4 text-white"> <strong>List of Users</strong></h1>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover user-table">
+                    <thead class="thead-dark">
+                        <tr class="text-center">
+                            <th> <strong>@Html.DisplayNameFor(model => model.UserName)</th></strong>
+                            <th> <strong>@Html.DisplayNameFor(model => model.Email)</th></strong>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="align-middle  " style=" color:#6c757d;">
+                                    <strong>@Html.DisplayFor(modelItem => item.FullName)</strong>
+                                </td>
+                                <td class="align-middle " style=" color:#6c757d; ">
+                                    <strong>@Html.DisplayFor(modelItem => item.Email)</strong>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <!-- Additional content column -->
+        </div>
+    </div>
+</div>

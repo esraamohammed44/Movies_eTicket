@@ -1,0 +1,82 @@
+﻿@model eTickets.Models.ViewModel.HeroViewModel
+@{
+    ViewData["Title"] = "Add a new hero";
+}
+<body style="background-image:url('/images/Add2.jpg'); background-size: cover; background-repeat: no-repeat; background-attachment: fixed;">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 form-container" style="background-color: #f8f9fa; margin-top: 15%; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h1 class="text-center" style="color: black;">Add a New Hero</h1>
+            <form method="post" id="createHeroForm" asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+             
+                <div class="form-group text-center">
+                    <img id="profilePicturePreview" class="border-info rounded-circle img-fluid" style="max-width: 150px;" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ProfilePictureFile" class="control-label">Profile Picture</label>
+                    <input id="profilePictureFile" asp-for="ProfilePictureFile" type="file" class="form-control" onchange="previewImage(event)" />
+                    <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+                </div>
+
+              
+                <div class="form-group">
+                    <label asp-for="FullName" class="control-label">Full Name</label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Biography" class="control-label">Biography</label>
+                    <input asp-for="Biography" class="form-control" />
+                    <span asp-validation-for="Biography" class="text-danger"></span>
+                </div>
+
+                <div class="form-group btn-container" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-outline-success float-right mb-3" style="margin-left: 60px;">Create</button>
+                    <a class="btn btn-outline-secondary mb-3" style="margin-left: 450px;" asp-action="Index">Show All</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('profilePicturePreview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+}
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

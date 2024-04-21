@@ -1,0 +1,80 @@
+﻿@using eTickets.Models.ViewModel
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="btn btn-outline-success my-2 my-sm-0" asp-controller="Account" asp-action="Login">
+                <i class="bi bi-box-arrow-in-right"></i> Log in
+            </a>
+        </li>
+        <li class="nav-item">
+            <span style="padding: 5px;"></span>
+        </li>
+        <li class="nav-item">
+            <a class="btn btn-outline-primary my-2 my-sm-0" asp-controller="Account" asp-action="Register">
+                <i class="bi bi-person-plus"></i> Register
+            </a>
+        </li>
+    </ul>
+}
+else
+{
+    var fullName = ""; // Initialize fullName variable
+
+    var user = await UserManager.GetUserAsync(User); // Retrieve user object
+    if (user != null)
+    {
+        if (await UserManager.IsInRoleAsync(user, "Admin"))
+        {
+            fullName = "Admin"; // Set fullName to "Admin" if the user is in the Admin role
+        }
+        else
+        {
+            fullName = "User"; 
+        }
+        fullName += " " + user.FullName; 
+    }
+    <div class="col-md-2 offset-md-1">
+        <div class="dropdown">
+            <button class="btn btn-outline-success dropdown-toggle" type="button" id="profile-btn" data-toggle="dropdown"
+                    aria-expanded="false">
+                <i class="bi bi-person-badge"></i> Hello @fullName
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="profile-btn">
+                <li>
+                    <a class="dropdown-item" asp-controller="Profile" asp-action="Index">
+                        <i class="bi bi-person"></i> Profile
+                    </a>
+                </li>
+                @if (!User.IsInRole("Admin"))
+                {
+                    <li>
+                        <a class="dropdown-item" asp-controller="Orders" asp-action="Index">
+                            <i class="bi bi-list"></i> Orders
+                        </a>
+                    </li>
+                }
+                @if (User.IsInRole("Admin"))
+                {
+                    <li>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Users">
+                            <i class="bi bi-people"></i> Users
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="col-md-1">
+        <form asp-controller="Account" asp-action="Logout">
+            <button class="btn btn-outline-danger btn-block my-2 my-sm-0">
+                <i class="bi bi-box-arrow-in-right"></i> Log out
+            </button>
+        </form>
+    </div>
+}

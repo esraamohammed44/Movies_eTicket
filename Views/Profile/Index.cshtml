@@ -1,0 +1,37 @@
+﻿@model eTickets.Models.ViewModel.RegisterVM
+<body style="background-size: cover;background-image: url('/images/Profile8.jpg'); background-repeat: no-repeat; object-fit: cover;">
+
+    <div class="container-fluid   " style="margin-top: 12em; width: 55em;margin-left: 45%; ">
+        <h1 class="text-center" style="color: white; ">Profile</h1>
+    <div class="card shadow p-4 md-20 ">
+        <div class="form-group">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" class="form-control" value="@Model.FullName" readonly>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" class="form-control" value="@Model.EmailAddress" readonly>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" class="form-control" value="@Model.Password" readonly>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" class="form-control" value="@Model.ConfirmPassword" readonly>
+        </div>
+        <div class="form-group d-flex justify-content-between" style="margin-top: 20px;">
+            <a class="btn btn-outline-success float-right  mb-3" style="background-color: #28a745; color: #fff; border-color: #28a745; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);"  href="@Url.Action("Edit", "Profile")">
+                <i class="bi bi-pencil"></i> Update
+            </a>
+            <a class="btn btn-outline-secondary  mb-3" style="background-color: #6c757d; color: #fff; border-color: #6c757d; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);" href="@Url.Action("Index", "Movies")">
+                <i class="bi bi-x"></i> Cancel
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+
+
+
+

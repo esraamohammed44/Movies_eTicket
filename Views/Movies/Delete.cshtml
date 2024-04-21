@@ -1,0 +1,92 @@
+﻿@model eTickets.Models.ViewModel.NewMovieVM
+
+@{
+    ViewData["Title"] = "Delete Movie";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+      
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); 
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+     
+       
+    </style>
+</head>
+<body style="background-image:url('/images/DeleteAdmin1.jpg'); background-size: cover; background-repeat: no-repeat; background-attachment: fixed;">
+
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10  mt-lg-5 ">
+                <div class="card bg-light">
+                    <!-- Add background color -->
+                    <div class="card-body">
+                        <h4 class="card-title">Delete Movie</h4>
+                        <hr>
+
+                        <div>
+                           
+                            <dl class="row">
+                                <dt class="col-sm-4">Name:</dt>
+                                <dd class="col-sm-8">@Model.Name</dd>
+
+                                <dt class="col-sm-4">Description:</dt>
+                                <dd class="col-sm-8">@Model.Description</dd>
+
+                                <dt class="col-sm-4">Price:</dt>
+                                <dd class="col-sm-8">@Model.Price</dd>
+
+                                <dt class="col-sm-4">Start Date:</dt>
+                                <dd class="col-sm-8">@Model.StartDate.ToShortDateString()</dd>
+
+                                <dt class="col-sm-4">End Date:</dt>
+                                <dd class="col-sm-8">@Model.EndDate.ToShortDateString()</dd>
+
+                                <dt class="col-sm-4">Category:</dt>
+                                <dd class="col-sm-8">@Model.MovieCategory</dd>
+                            </dl>
+                        </div>
+
+                        <div class="form-group d-flex justify-content-between" style="margin-top: 20px;">
+                            <form asp-action="Delete">
+                                <input type="hidden" asp-for="Id" />
+                                <input type="submit" value="Confirm" class="btn btn-danger mb-3" />
+                            </form>
+                            <a class="btn btn-outline-secondary mb-3" asp-action="Index">Show All</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include jQuery before Bootstrap's JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

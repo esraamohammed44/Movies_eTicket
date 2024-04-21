@@ -1,0 +1,61 @@
+﻿@model Producer
+
+@{
+    ViewData["Title"] = "Update Producer";
+}
+
+<body style="background-image:url('/images/AdminEdit.jpg'); background-size: cover; background-repeat: no-repeat; background-attachment: fixed;">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 mt-lg-5">
+                <div class="card shadow p-4 " style="background-color: #f8f9fa; border-radius: 10px;">
+                    <h1 class="text-center mb-4" style="color: #343a40;">Update Producer</h1>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-action="Edit">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <div class="form-group text-center">
+                                    <img id="ProfilePicturePreview" class="border-info rounded-circle shadow-lg" style="max-width: 250px; border: 5px solid #f8f9fa;" src="/images/@Model.ProfilePictureURL" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="ProfilePictureURL" class="control-label"></label>
+                                    <input type="text" id="ProfilePictureURL" name="ProfilePictureURL" class="form-control" value="@Model.ProfilePictureURL" />
+                                    <span asp-validation-for="ProfilePictureURL" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="FullName" class="control-label"></label>
+                                    <input asp-for="FullName" class="form-control" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Biography" class="control-label"></label>
+                                    <input asp-for="Biography" class="form-control" />
+                                    <span asp-validation-for="Biography" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group d-flex justify-content-between mt-4">
+                                    <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                                    <input type="submit" value="Update" class="btn btn-outline-success" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            $(document).ready(function () {
+                $("#ProfilePictureURL").on("input", function () {
+                    var imageUrl = $(this).val();
+                    $("#ProfilePicturePreview").attr("src", imageUrl);
+                });
+            });
+        </script>
+    }
+</body>
+

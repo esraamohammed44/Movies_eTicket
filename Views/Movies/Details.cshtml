@@ -1,0 +1,189 @@
+﻿@model Movie
+@using System.Globalization
+
+@{
+    CultureInfo culture = new CultureInfo("en-US"); // Set culture to English for month names and currency
+}
+
+@{
+    ViewData["Title"] = "Movie details";
+}
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <body style="background-size: cover; background-image: url('/images/o9.jpg'); background-repeat: no-repeat; object-fit: cover;">
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 offset-md-2" style="margin-top: 20px;">
+                    <div class="card" style="width:55em;margin-top:6em; margin-left: 15em;
+                        ">
+                        <div class="row g-0">
+                            <div class="col-md-12">
+                                <div class="card-header text-white" style="background-color: rgba(0, 0, 0, 0.1);">
+                                    <h5 class="card-title">@Model.Name</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <img src="/images/@Model.ImageURL" class="card-img" alt="@Model.Name">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <p class="card-text">@Model.Description</p>
+                                    <p class="card-text"><b>Cinema: </b><a asp-controller="Cinemas" asp-action="Details" asp-route-id="@Model.CinemaId">@Model.Cinema.Name</a></p>
+                                    <p class="card-text"><b>Producer: </b><a asp-controller="Producers" asp-action="Details" asp-route-id="@Model.ProducerId">@Model.Producer.FullName</a></p>
+                                    <p class="card-text"><b>Category: </b>@Model.MovieCategory</p>
+                                    <p class="card-text"><b>Start Date: </b>@Model.StartDate.ToString("dd MMM yy", culture)</p>
+                                    <p class="card-text"><b>End Date: </b>@Model.EndDate.ToString("dd MMM yy", culture)</p>
+                                    <p class="card-text">
+                                        <b>Status: </b>
+                                        @if (DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate)
+                                        {
+                                            <span class="badge bg-success text-white">AVAILABLE</span>
+                                        }
+                                        else if (DateTime.Now > Model.EndDate)
+                                        {
+                                            <span class="badge bg-danger text-white">EXPIRED</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary text-white">UPCOMING</span>
+                                        }
+                                    </p>
+
+                                    <p class="card-text"><b>Heroes: </b></p>
+                                    <hr />
+                                    <div class="row">
+                                        @foreach (var hero in Model.Heroes_Movies)
+                                        {
+                                            <div class="col-md-4 text-center">
+                                                <img src="/images/@hero.Hero.ProfilePictureURL" class="border-info rounded-circle" style="width: 100px; height: 100px;" alt="@hero.Hero.FullName">
+                                                <br />
+                                                <a asp-controller="Heroes" asp-action="Details" asp-route-id="@hero.HeroId">@hero.Hero.FullName</a>
+                                            </div>
+                                        }
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card-footer">
+                                <div class="form-group btn-container" style=" text-align: center; width:60em">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-6">
+                                            <div class="row justify-content-between">
+                                                <div class="col-md-8">
+                                                    <a class="btn btn-outline-primary btn-block btn-sm" asp-action="Index">Back to List</a>
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </body>
+
+
+}
+
+
+@if (!User.IsInRole("Admin"))
+{
+
+    <body style="background-size: cover; background-image: url('/images/MovieDetails.jpg'); background-repeat: no-repeat; object-fit: cover;">
+
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 offset-md-2" style="margin-top: 20px;">
+                    <div class="card" style="width:55em;margin-top:6em; margin-left: 15em;
+                    ">
+                        <div class="row g-0">
+                            <div class="col-md-12">
+                                <div class="card-header text-white" style="background-color: rgba(0, 0, 0, 0.1);">
+                                    <h5 class="card-title">@Model.Name</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <img src="/images/@Model.ImageURL" class="card-img" alt="@Model.Name">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <p class="card-text">@Model.Description</p>
+                                    <p class="card-text"><b>Cinema: </b><a asp-controller="Cinemas" asp-action="Details" asp-route-id="@Model.CinemaId">@Model.Cinema.Name</a></p>
+                                    <p class="card-text"><b>Producer: </b><a asp-controller="Producers" asp-action="Details" asp-route-id="@Model.ProducerId">@Model.Producer.FullName</a></p>
+                                    <p class="card-text"><b>Category: </b>@Model.MovieCategory</p>
+                                    <p class="card-text"><b>Start Date: </b>@Model.StartDate.ToString("dd MMM yy", culture)</p>
+                                    <p class="card-text"><b>End Date: </b>@Model.EndDate.ToString("dd MMM yy", culture)</p>
+                                    <p class="card-text">
+                                        <b>Status: </b>
+                                        @if (DateTime.Now >= Model.StartDate && DateTime.Now <= Model.EndDate)
+                                        {
+                                            <span class="badge bg-success text-white">AVAILABLE</span>
+                                        }
+                                        else if (DateTime.Now > Model.EndDate)
+                                        {
+                                            <span class="badge bg-danger text-white">EXPIRED</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary text-white">UPCOMING</span>
+                                        }
+                                    </p>
+
+                                    <p class="card-text"><b>Heroes: </b></p>
+                                    <hr />
+                                    <div class="row">
+                                        @foreach (var hero in Model.Heroes_Movies)
+                                        {
+                                            <div class="col-md-4 text-center">
+                                                <img src="/images/@hero.Hero.ProfilePictureURL" class="border-info rounded-circle" style="width: 100px; height: 100px;" alt="@hero.Hero.FullName">
+                                                <br />
+                                                <a asp-controller="Heroes" asp-action="Details" asp-route-id="@hero.HeroId">@hero.Hero.FullName</a>
+                                            </div>
+                                        }
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card-footer">
+                                <div class="form-group btn-container" style=" text-align: center; width:60em">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-6">
+                                            <div class="row justify-content-between">
+                                                <div class="col-md-6">
+                                                    <a class="btn btn-outline-primary btn-block btn-sm" asp-action="Index">Back to List</a>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <a class="btn btn-success btn-block btn-sm text-white @((DateTime.Now > Model.EndDate) ? "disabled" : "")" asp-controller="Orders" asp-action="AddItemToShoppingCart" asp-route-id="@Model.Id">
+                                                        <i class="bi bi-cart-plus"></i> Add to Cart (Price @Model.Price.ToString("c", culture))
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+
+    </body>
+}

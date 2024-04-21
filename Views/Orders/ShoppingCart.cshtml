@@ -1,0 +1,156 @@
+﻿@model ShoppingCartVM
+@using eTickets.Models.ViewModel
+@using System.Globalization
+
+@{
+    CultureInfo culture = new CultureInfo("en-US"); 
+    
+}
+
+@{
+    ViewData["Title"] = "Shopping cart summary";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body style="background-image: url('/images/shopping2.jfif'); background-size: cover;  background-attachment: fixed;">
+
+    <div class="container-fluid">
+        <div class="row justify-content-start mt-lg-5">
+            <div class="col-md-6">
+                <div class="card" style="margin-top: 250px;">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Your shopping cart summary</h2>
+                        <hr />
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Selected amount</th>
+                                        <th>Movie</th>
+                                        <th>Price</th>
+                                        <th>Subtotal</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
+                                    {
+                                        <tr>
+                                            <td>@item.Amount</td>
+                                            <td>@item.Movie.Name</td>
+                                            <td>@item.Movie.Price.ToString("c", culture)</td>
+                                            <td>@((item.Amount * item.Movie.Price).ToString("c", culture))</td>
+                                            <td>
+                                                <a class="text-danger" asp-controller="Orders" asp-action="RemoveItemFromShoppingCart"
+                                                   asp-route-id="@item.Movie.Id">
+                                                    <i class="bi bi-cart-dash"></i>
+                                                </a>
+                                                |
+                                                <a class="text-success" asp-controller="Orders" asp-action="AddItemToShoppingCart"
+                                                   asp-route-id="@item.Movie.Id">
+                                                    <i class="bi bi-cart-plus"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2"></td>
+                                        <td><b>Total:</b></td>
+                                        <td>@Model.ShoppingCartTotal.ToString("c", culture)</td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="text-right mt-3">
+                            <div class="btn-group">
+                                <div id="paypal-button-container"></div>
+                                <a class="btn btn-outline-success  ml-5" asp-controller="Movies" asp-action="Index">
+                                    Add more items
+                                </a>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include SignalR script -->
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+
+    <!-- Script to connect to SignalR hub -->
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/shoppingCartHub")
+            .build();
+
+        connection.start()
+            .then(function () {
+                console.log("SignalR connection established.");
+            })
+            .catch(function (err) {
+                console.error(err.toString());
+            });
+    </script>
+
+    @section Scripts {
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+        <script>
+            let _total = @Html.Raw(Model.ShoppingCartTotal);
+
+            paypal.Button.render({
+                //Configure environment
+                env: 'sandbox',
+                client: {
+                    sandbox: 'AcKRtgL4i68EZ2ZYuYUx3ilihAg2YhL5dtF_m19A8MjBWVOn6ewNS4M_uV8gA3xi98zTcUq38gUHbVFx'
+                },
+
+                //Customize button
+                locale: 'en_US',
+                style: {
+                    size: 'small',
+                    color: 'gold',
+                    shape: 'pill'
+                },
+                commit: true,
+
+                //Set up a payment
+                payment: function (data, actions) {
+                    return actions.payment.create({
+                        transactions: [{
+                            amount: {
+                                total: _total,
+                                currency: 'USD'
+                            }
+                        }]
+                    });
+                },
+
+                //Execute the payment
+                onAuthorize: function (data, actions) {
+                    return actions.payment.execute().then(function () {
+                        var url = '@Url.Action("CompleteOrder", "Orders", new { })';
+                        window.location.href = url;
+                    });
+                }
+
+            }, '#paypal-button-container')
+        </script>
+    }
+</body>
+</html>

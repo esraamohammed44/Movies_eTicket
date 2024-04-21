@@ -1,0 +1,116 @@
+﻿@model NewMovieVM
+@using eTickets.Models.ViewModel;
+@{
+    ViewData["Title"] = "Update movie";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"]</title>
+</head>
+<body style="background-image: url('/images/MovieEdit.jpg'); background-size: cover; background-repeat: no-repeat; background-attachment: fixed;">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <p>
+                    <h4 class="text-white-50"> <sttrong>Update movie</sttrong>Update movie</h4>
+                </p>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <img width="100%" id="ImageUrlPreview" src="/images/@Model.ImageURL" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); height:400px; background-color: #fff; border: 1px solid #ced4da; border-radius: 5px;" />
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <form asp-action="Edit">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Name" class="control-label text-white"></label>
+                                        <input asp-for="Name" class="form-control" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                        </div>
+                            <div class="form-group">
+                                <label asp-for="StartDate" class="control-label text-white"></label>
+                                <input asp-for="StartDate" type="date" class="form-control" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;" />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                        <label asp-for="EndDate" class="control-label   text-white"></label>
+                                <input asp-for="EndDate" type="date" class="form-control" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;" />
+                                <span asp-validation-for="EndDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                        <label asp-for="Price" class="control-label  text-white"></label>
+                                <input asp-for="Price" type="number" class="form-control" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                        <label asp-for="ImageURL" class="control-label   text-white"></label>
+                                <input asp-for="ImageURL" class="form-control" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;" />
+                                <span asp-validation-for="ImageURL" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                        <label asp-for="CinemaId" class="control-label   text-white"></label>
+                                <select asp-for="CinemaId" class="form-control" asp-items="ViewBag.Cinemas" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;"></select>
+                                <span asp-validation-for="CinemaId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="MovieCategory" class="control-label"></label>
+                                <select asp-for="MovieCategory" class="form-control" asp-items="Html.GetEnumSelectList<MovieCategory>()" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;"></select>
+                                <span asp-validation-for="MovieCategory" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                        <label asp-for="ProducerId" class="control-label   text-white"></label>
+                                <select asp-for="ProducerId" class="form-control" asp-items="ViewBag.Producers" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;"></select>
+                                <span asp-validation-for="ProducerId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                        <label asp-for="HeroIds" class="control-label   text-white"></label>
+                                <select asp-for="HeroIds" class="form-control" asp-items="ViewBag.Heroes" multiple style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;"></select>
+                                <span asp-validation-for="HeroIds" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                        <label asp-for="Description" class="control-label   text-white"></label>
+                                <textarea asp-for="Description" class="form-control" style="box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); background-color: #f8f9fa; color: #495057;"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group d-flex justify-content-between" style="margin-top: 20px;">
+                        <input type="submit" value="Update" class="btn btn-outline-success float-right  mb-3" style="background-color: #28a745; color: #fff; border-color: #28a745; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);" />
+                        <a class="btn btn-outline-secondary  mb-3" asp-action="Index" style="background-color: #6c757d; color: #fff; border-color: #6c757d; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);">Show All</a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var output = document.getElementById("ImageUrlPreview");
+            output.src = "/images/@Model.ImageURL";
+        });
+
+        $("#ImageURL").on("change", function () {
+            var output = document.getElementById("ImageUrlPreview");
+            output.src = $(this).val();
+        })
+    </script>
+}
+</body>

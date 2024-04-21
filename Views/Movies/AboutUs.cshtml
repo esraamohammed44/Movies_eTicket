@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Title</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/images/About2.png'); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-lg-5">
+        <div class="card w-700 ">
+            <div class="card-body" style="background-color: rgba(204, 213, 221, 0.7);">
+                <h1 class="card-title text-center"><strong>@Model.Title</strong></h1>
+                <p class="lead text-center"><strong>@Model.Description</strong></p>
+
+                <h2 class="mt-5"><u><strong>Mission</strong></u></h2>
+                <p><strong>@Model.Mission</strong></p>
+                <h2 class="mt-5"><u><strong>Vision</strong></u></h2>
+                <p><strong>@Model.Vision</strong></p>
+                <h2 class="mt-5"><u><strong>Contact Information</strong></u></h2>
+                <p><strong>Address: @Model.CompanyAddress</strong></p>
+                <p><strong>Email: <a href="mailto:@Model.ContactEmail">@Model.ContactEmail</a></strong></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
